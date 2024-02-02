@@ -10,6 +10,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import { ConfimationComponent } from '../dialog/confimation/confimation.component';
 import { saveAs } from 'file-saver';
 
+
 @Component({
   selector: 'app-view-bill',
   templateUrl: './view-bill.component.html',
@@ -26,12 +27,16 @@ export class ViewBillComponent implements OnInit {
     private router : Router,
     ) 
    {}
+   
+
     ngOnInit(): void {
-        this.tableData();    
+        this.tableData(); 
+        
     }
     tableData(){
       this.billService.getBills().subscribe((response :any)=>{
         this.dataSource = new MatTableDataSource(response);
+        
       },(error :any)=>{
         console.log(error);
       if(error.error?.message){
@@ -73,12 +78,7 @@ export class ViewBillComponent implements OnInit {
         saveAs(response ,values.uuid+'.pdf')
       })
 
-
-
-
     }
-
-
 
     handleDeleteAction(values:any){
       const dialogConfig = new MatDialogConfig();
