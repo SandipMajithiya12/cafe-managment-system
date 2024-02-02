@@ -1,0 +1,14 @@
+// Example styles in 'sidebar.component.scss'
+mat-list-item {
+    &.selected a {
+        background-color: rgb(202, 68, 68);
+        color: rgb(231, 227, 225);
+        border: 2px solid rgb(202, 68, 68); // Border for the selected item
+    }
+
+    &:not(.selected) a {
+        background-color: rgb(231, 227, 225);
+        color: rgb(202, 68, 68);
+        border: 2px solid rgb(202, 68, 68); // Border for unselected items
+    }
+}
