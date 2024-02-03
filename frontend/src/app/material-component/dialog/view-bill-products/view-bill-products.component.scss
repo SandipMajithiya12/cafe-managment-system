@@ -49,3 +49,17 @@
         background-color: #04AA6D;
         color: white;
       }
+  
+.mat-card-class {
+  height: 80vh;
+  width: 90vw;
+}
+
+/* Optional: Center the card horizontally and vertically */
+.mat-card-class {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
