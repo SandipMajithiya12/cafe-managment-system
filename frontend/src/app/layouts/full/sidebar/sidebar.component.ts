@@ -9,14 +9,16 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class AppSidebarComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
-  token:any = localStorage.getItem('token');
-  tokenPayload :any;
+  token: any = localStorage.getItem('token');
+  tokenPayload: any;
+  selectedState: string | null = null;
+
   private _mobileQueryListener: () => void;
 
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
-    public menuItem : MenuItems
+    public menuItem: MenuItems
   ) {
     this.tokenPayload = jwtDecode(this.token);
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
@@ -27,5 +29,8 @@ export class AppSidebarComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
-  
+
+  selectState(state: string): void {
+    this.selectedState = state;
+  }
 }

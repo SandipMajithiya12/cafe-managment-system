@@ -14,6 +14,8 @@ import { GlobalConstants } from '../shared/global-constent';
 export class LoginComponent implements OnInit {
   loginForm:any = FormGroup;
   responseMessage:any
+  showPassword: boolean = false;
+
   constructor(private formBuilder : FormBuilder,
     private router : Router,
     private userService : UserService,
@@ -46,6 +48,11 @@ export class LoginComponent implements OnInit {
       }
       this.snackbarService.openSnackbar(this.responseMessage,GlobalConstants.error)
     })
+  }
+
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
 }
