@@ -1,9 +1,11 @@
-const express = require('express');
-const connection = require('../connection')
-const router = express.Router();
-var auth = require('../servies/authentication');
+import authenticateToken from '../servies/authentication.js';
 
-router.get('/details',auth.authenticateToken,(req,resp)=>{
+
+import express from 'express';
+import connection from '../connection.js'; // Make sure to include the .js extension
+const router = express.Router();
+
+router.get('/details',authenticateToken,(req,resp)=>{
     var categoryCount;
     var productCount;
     var billCount;
@@ -44,4 +46,4 @@ router.get('/details',auth.authenticateToken,(req,resp)=>{
 
 
 })
-module.exports = router;
+export default router;

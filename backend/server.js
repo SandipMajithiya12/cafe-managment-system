@@ -1,8 +1,10 @@
-require('dotenv').config();
-const http = require('http');
-const app = require('./index');
+import dotenv from 'dotenv';
+import http from 'http';
+import app from './index.js'; // Ensure the correct relative path and file extension
 
-const port = 3006;
+dotenv.config();
+
+const port = process.env.PORT || 3006;
 const server = http.createServer(app);
 
 server.listen(port, () => {

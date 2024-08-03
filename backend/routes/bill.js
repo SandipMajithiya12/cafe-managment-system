@@ -1,14 +1,17 @@
-const express = require('express');
-const connection = require('../connection')
-const router = express.Router();
-let ejs = require('ejs');
-let pdf  = require('html-pdf');
-let path = require('path');
-var fs =require('fs');
-var uuid = require('uuid');
-var auth = require('../servies/authentication')
+import authenticateToken from '../servies/authentication.js';
 
-router.post('/generateReport',auth.authenticateToken,(req,resp)=>{
+import express from 'express';
+import connection from '../connection.js'; // Make sure to include the .js extension
+const router = express.Router();
+import ejs from 'ejs';
+import pdf from 'html-pdf';
+import path from 'path';
+
+import fs from 'fs';
+
+import { v4 as uuid } from 'uuid'; 
+
+router.post('/generateReport',authenticateToken,(req,resp)=>{
     const generateUuid = uuid.v1();
   
     const orderDetails = req.body;
@@ -50,7 +53,7 @@ router.post('/generateReport',auth.authenticateToken,(req,resp)=>{
         }
     })
 })
-router.post('/getPdf',auth.authenticateToken,(req,resp)=>{
+router.post('/getPdf',authenticateToken,(req,resp)=>{
     const orderDetails = req.body;
     const pdfPath = './Generate_pdf/'+orderDetails.uuid+".pdf";
     if(fs.existsSync(pdfPath)){
@@ -83,7 +86,7 @@ router.post('/getPdf',auth.authenticateToken,(req,resp)=>{
 
     }
 })
-router.get('/getbills',auth.authenticateToken,(req,resp)=>{
+router.get('/getbills',authenticateToken,(req,resp)=>{
     query = "select *from bill order by id DESC";
     connection.query(query,(err,results)=>{
         if(!err){
@@ -94,7 +97,7 @@ router.get('/getbills',auth.authenticateToken,(req,resp)=>{
         }
     })
 })
-router.delete('/delete/:id',auth.authenticateToken,(req,resp,next)=>{
+router.delete('/delete/:id',authenticateToken,(req,resp,next)=>{
     const id = req.params.id
     query = "delete from bill where id =?"
     connection.query(query,[id],(err,results)=>{
@@ -111,4 +114,4 @@ router.delete('/delete/:id',auth.authenticateToken,(req,resp,next)=>{
         }
     })
 })
-module.exports = router;
+export default router;

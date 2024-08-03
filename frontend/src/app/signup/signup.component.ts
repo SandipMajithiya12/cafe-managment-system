@@ -15,6 +15,7 @@ export class SignupComponent implements OnInit {
   signupForm:any = FormGroup;
   responseMessage:any;
   ngxService: any;
+  showPassword: boolean = false;
 
   constructor(private formBuilder : FormBuilder,
     private router : Router,
@@ -60,5 +61,8 @@ export class SignupComponent implements OnInit {
       }
       this.snackbarService.openSnackbar(this.responseMessage,GlobalConstants.error);
     })
+  }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }

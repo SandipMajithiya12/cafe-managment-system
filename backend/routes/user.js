@@ -1,14 +1,17 @@
-const express = require('express');
-const connection = require('../connection');
-const router = express.Router();
-const jwt = require('jsonwebtoken');
-const nodmailer = require('nodemailer');
-require('dotenv').config();
-var auth = require('../servies/authentication');
-var checkToken = require('../servies/checkrole');
+import { query, Router } from 'express';
+import connection from '../connection.js';
+const router = Router();
+import pkg from 'jsonwebtoken';
+const { sign } = pkg;
+import nodmailer from 'nodemailer';
+import dotenv from 'dotenv';
+import authenticateToken from '../servies/authentication.js';
+import checkRole from '../servies/checkrole.js';
+dotenv.config();
 router.post('/signup',(req,resp)=>{
     let user = req.body;
-    query = "select email,password,role,status from user where email = ?"
+    console.log(user);
+     var query  = "select email,password,role,status from user where email = ?"
     connection.query(query,[user.email],(err,results)=>{
         if(!err){
             if(results.length <= 0){
@@ -34,7 +37,7 @@ router.post('/signup',(req,resp)=>{
 })
 router.post('/login',(req,resp)=>{
     let user = req.body;
-    query = "select email,password,role,status from user where email = ?"
+   var  query = "select email,password,role,status from user where email = ?"
     connection.query(query,[user.email],(err,results)=>{
         if(!err){
             if(results.length <=0 || results[0].password != user.password){
@@ -45,7 +48,7 @@ router.post('/login',(req,resp)=>{
             }
             else if(results[0].password == user.password){
                 const response = {email : results[0].email,role: results[0].role}
-                const accesstoken = jwt.sign(response,process.env.ACCESS_TOKEN,{expiresIn : '8h'})
+                const accesstoken = sign(response,process.env.ACCESS_TOKEN,{expiresIn : '8h'})
                 resp.status(200).json({token : accesstoken});
 
             }
@@ -59,7 +62,7 @@ router.post('/login',(req,resp)=>{
         }
     })
 })
-router.get('/get',auth.authenticateToken,checkToken.checkRole,(req,resp)=>{
+router.get('/get',authenticateToken,checkRole,(req,resp)=>{
     var query = "select id,name,email,contactNumber,status from user where role = 'user'";
     connection.query(query,(err,results)=>{
         if(!err){
@@ -71,7 +74,7 @@ router.get('/get',auth.authenticateToken,checkToken.checkRole,(req,resp)=>{
     })
 
 })
-router.patch('/update',auth.authenticateToken,checkToken.checkRole,(req,resp)=>{
+router.patch('/update',authenticateToken,checkRole,(req,resp)=>{
     let user  = req.body;
     var query = "update user set status=? where id=?";
     connection.query(query,[user.status,user.id],(err,results)=>{
@@ -91,12 +94,12 @@ router.patch('/update',auth.authenticateToken,checkToken.checkRole,(req,resp)=>{
 
 
 
-router.get('/checkToken',auth.authenticateToken,checkToken.checkRole,(req,resp)=>{
+router.get('/checkToken',authenticateToken,checkRole,(req,resp)=>{
     return resp.status(200).json({message : "true"});
 })
 
 
-router.post('/changePassword',auth.authenticateToken,(req,resp)=>
+router.post('/changePassword',authenticateToken,(req,resp)=>
 {
     const user = req.body;
      const email = resp.locals.email;
@@ -137,4 +140,4 @@ router.post('/changePassword',auth.authenticateToken,(req,resp)=>
     
 })
 
-module.exports = router
+export default router;
